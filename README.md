@@ -1,5 +1,5 @@
 # DataStructs.jl/
-A DS&amp;A package for Julia. Contains other miscellaneous classic algorithms as well (WIP).
+A DS&amp;A package for Julia. Might contain other miscellaneous classic algorithms as well (WIP).
 
 Currently supported Data Structures:
 
