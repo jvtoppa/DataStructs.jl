@@ -1,0 +1,10 @@
+# This file is machine-generated - editing it directly is not advised
+
+julia_version = "1.12.4"
+manifest_format = "2.0"
+project_hash = "7d3801d237ea3b350fdd01b0ba5b60fa381a6776"
+
+[[deps.DataStructs]]
+path = "."
+uuid = "88ca5a4c-c0cb-4137-be7c-b24efc68920f"
+version = "1.0.0-DEV"
