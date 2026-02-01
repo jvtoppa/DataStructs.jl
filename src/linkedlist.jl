@@ -8,6 +8,26 @@ mutable struct LinkedList{T}
     head::Union{NodeLL{T}, Nothing}
     size::Int
 end
+#Constructors 
+LinkedList{T}() where T = LinkedList{T}(nothing, nothing, 0)
+LinkedList() = LinkedList{Any}()
+LinkedList{T}(elements::Vector{T}) where T = begin
+
+    if isempty(elements)
+        return LinkedList{T}(nothing, nothing, 0)
+    end
+    
+    head = nothing
+    last = nothing
+    for elem in reverse(elements)
+        head = NodeLL{T}(elem, head)
+        if last === nothing
+            last = head
+        end
+    end
+    
+    return LinkedList{T}(last, head, length(elements))
+end
 
 function InsertAnyNode(ll::LinkedList{T}, position::Int, amount::T) where T
     if position < 0
@@ -77,22 +97,7 @@ function RemoveNode(ll, pos)
     return ll
 end
 
-function ConstructLL(elements::Vector{T}) where T
-    if isempty(elements)
-        return LinkedList{T}(nothing, nothing, 0)
-    end
-    
-    head = nothing
-    last = nothing
-    for elem in reverse(elements)
-        head = NodeLL{T}(elem, head)
-        if last === nothing
-            last = head
-        end
-    end
-    
-    return LinkedList{T}(last, head, length(elements))
-end
+
 
 function FindElement(ll::LinkedList{T}, n::T) where T
     current = ll.head
@@ -103,4 +108,19 @@ function FindElement(ll::LinkedList{T}, n::T) where T
         current = current.next
     end
     return nothing
+end
+
+function Base.show(io::IO, ll::LinkedList{T}) where T
+    iterator = ll.head
+    print(io, "(")
+    while iterator !== nothing
+        print(iterator.elem)
+        if iterator.next !== nothing
+            print(io, ", ")
+        else
+            print(io, ")")
+        end
+        iterator = iterator.next
+    end
+
 end
