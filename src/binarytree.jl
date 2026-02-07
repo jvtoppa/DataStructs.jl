@@ -1,6 +1,6 @@
 module BinaryTrees
 
-export BinarySearchTree, isempty, length, in, search, successor, insert!, iterate, empty!
+export BinarySearchTree, isempty, length, in, search, successor, insert!, iterate, empty!, minimum
 
 include("stack.jl")   # loads the module
 using .Containers
@@ -199,9 +199,33 @@ function Base.iterate(tree::BinarySearchTree{T}, stack::Stack{NodeBST{T}}) where
     end
 end
 
+function Base.minimum(tree::BinarySearchTree{T}) where T
+    if tree.root === nothing
+        return nothing
+    end
+    curr = tree.root
+    while curr.left !== nothing
+        curr = curr.left
+    end
+    return curr.elem
+end
+
+function Base.maximum(tree::BinarySearchTree{T}) where T
+    if tree.root === nothing
+        return nothing
+    end
+    curr = tree.root
+    while curr.right !== nothing
+        curr = curr.right
+    end
+    return curr.elem
+end
+
 function main() 
     bt = BinarySearchTree{Int}([1,2,3,4,56,7,8,9,200,123,4])
-    print(predecessor(bt, 56))
+    println(predecessor(bt, 56))
+    println(maximum(bt))
+    println(minimum(bt))
 end
 
 main()
