@@ -117,7 +117,7 @@ function Base.insert!(tree::BinarySearchTree{T}, key::T) where T
 end
 
 function main()
-    bt = BinarySearchTree{Int}([1,2,3,4,56,7,8,9,200,123,4])
+    bt = BinarySearchTree{Int}([1,2,3,4,56,7,8,9,200,123])
     print_tree_vertical(bt)
     print(isempty(bt))  
 end
