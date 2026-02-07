@@ -61,13 +61,10 @@ function print_tree_vertical(tree::BinarySearchTree{T}; level::Int=0) where T
     
     function print_node_vertical(node::Union{NodeBST{T}, Nothing}, prefix::String="", is_left::Bool=true)
         if node !== nothing
-            # Print right subtree first (top in this view)
             print_node_vertical(node.right, prefix * (is_left ? "│   " : "    "), false)
             
-            # Print current node
             println(prefix, is_left ? "└── " : "┌── ", node.elem)
             
-            # Print left subtree (bottom in this view)
             print_node_vertical(node.left, prefix * (is_left ? "    " : "│   "), true)
         end
     end
@@ -79,7 +76,7 @@ function print_tree_vertical(tree::BinarySearchTree{T}; level::Int=0) where T
     end
 end
 
-function insertW(tree::BinarySearchTree{T}, treeHead::Union{NodeBST{T},Nothing}, key::T) where T
+function insert_root(tree::BinarySearchTree{T}, treeHead::Union{NodeBST{T},Nothing}, key::T) where T
     if treeHead === nothing
         tree.size += 1
         return NodeBST{T}(key, nothing, nothing)
@@ -93,8 +90,29 @@ function insertW(tree::BinarySearchTree{T}, treeHead::Union{NodeBST{T},Nothing},
     return treeHead
 end
 
+function search_non_head(treeHead::Union{NodeBST{T}, Nothing}, key::T) where T
+    if treeHead === nothing
+        return false
+    end
+
+    if key < treeHead.elem
+        return search(tree, treeHead.left, key)
+    elseif key > treeHead.elem
+        return search(tree, treeHead.right, key)
+    else
+        return true
+    end
+end
+
+function search(tree::BinarySearchTree{T}, key::T) where T #wrapper
+    return search_non_head(tree.root, key)
+end
+
+
+
+
 function Base.insert!(tree::BinarySearchTree{T}, key::T) where T
-    tree.root = insertW(tree, tree.root, key)
+    tree.root = insert_root(tree, tree.root, key)
     return tree
 end
 
