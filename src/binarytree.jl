@@ -134,7 +134,7 @@ end
 
 function successor(tree::Union{BinarySearchTree{T}, Nothing}, target::T) where T
     node = _successor(tree.root, target)
-    return node === nothing ? nothing : node.elemend
+    return node === nothing ? nothing : node.elem
 end
 
 function Base.insert!(tree::BinarySearchTree{T}, key::T) where T
@@ -146,7 +146,8 @@ function main()
     bt = BinarySearchTree{Int}([1,2,3,4,56,7,8,9,200,123,4])
     print_tree_vertical(bt)
     print(isempty(bt))
-    print(successor(bt, 56))  
+    print(successor(bt, 56)) 
+    print(search(bt, 56)) 
 end
 
 main()
