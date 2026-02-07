@@ -1,3 +1,10 @@
+module BinaryTrees
+
+export BinarySearchTree, isempty, length, in, search, successor, insert!, iterate, clear
+
+include("stack.jl")   # loads the module
+using .Containers
+
 #insert()
 #remove()
 abstract type BinaryTreeNode{T} end
@@ -47,7 +54,7 @@ Base.length(tree::BinaryTree{T}) where T = tree.size
 
 #clear()
 
-function Base.empty!(tree::BinaryTree{T}) where T
+function Base.clear!(tree::BinaryTree{T}) where T
     tree.root = nothing
     tree.size = 0
 end
@@ -110,13 +117,6 @@ end
 
 Base.in(key, tree::BinarySearchTree) = search(tree, key)
 
-function leftmostnode(node::Union{NodeBST{T}, Nothing}) where T
-    while node.left !== nothing
-        node = node.left
-    end
-    return node
-end
-
 function _successor(node::Union{NodeBST{T}, Nothing}, target::T) where T
     curr = node
     succ = nothing
@@ -134,7 +134,7 @@ end
 
 function successor(tree::Union{BinarySearchTree{T}, Nothing}, target::T) where T
     node = _successor(tree.root, target)
-    return node === nothing ? nothing : node.elemend
+    return node === nothing ? nothing : node.elem
 end
 
 function Base.insert!(tree::BinarySearchTree{T}, key::T) where T
@@ -142,11 +142,39 @@ function Base.insert!(tree::BinarySearchTree{T}, key::T) where T
     return tree
 end
 
-function main()
-    bt = BinarySearchTree{Int}([1,2,3,4,56,7,8,9,200,123,4])
-    print_tree_vertical(bt)
-    print(isempty(bt))
-    print(successor(bt, 56))  
+function _push_left(stack::Stack{NodeBST{T}}, node::Union{NodeBST{T}, Nothing}) where T
+    
+    while node !== nothing
+        push!(stack, node)
+        node = node.left
+    end
+
 end
 
-main()
+function Base.iterate(tree::BinarySearchTree{T}) where T
+    stack = Stack(NodeBST{T})
+
+    _push_left(stack, tree.root)
+    
+    if isempty(stack)
+        return nothing
+    
+    else
+        node = pop!(stack)
+        _push_left(stack, node.right)
+        return node.elem, stack
+    end
+
+end
+
+function Base.iterate(tree::BinarySearchTree{T}, stack::Stack{NodeBST{T}}) where T
+    if isempty(stack)
+        return nothing
+    else
+        node = pop!(stack)
+        _push_left(stack, node.right)
+        return node.elem, stack
+    end
+end
+
+end
