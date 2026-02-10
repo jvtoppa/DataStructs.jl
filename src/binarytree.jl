@@ -1,6 +1,6 @@
 module BinaryTrees
 
-export BinarySearchTree, isempty, length, in, search, successor, insert!, iterate, clear
+export BinarySearchTree, isempty, length, in, search, successor, insert!, iterate, empty!, minimum
 
 include("stack.jl")   # loads the module
 using .Containers
@@ -54,7 +54,7 @@ Base.length(tree::BinaryTree{T}) where T = tree.size
 
 #clear()
 
-function Base.clear!(tree::BinaryTree{T}) where T
+function Base.empty!(tree::BinaryTree{T}) where T
     tree.root = nothing
     tree.size = 0
 end
@@ -137,6 +137,28 @@ function successor(tree::Union{BinarySearchTree{T}, Nothing}, target::T) where T
     return node === nothing ? nothing : node.elem
 end
 
+function _predecessor(root::Union{NodeBST{T}, Nothing}, key::T) where T
+    pred = nothing
+    curr = root
+    
+    while curr !== nothing
+        if key > curr.elem
+            pred = curr
+            curr = curr.right
+        else
+            curr = curr.left
+        end
+    end
+    
+    return pred
+end
+
+function predecessor(tree::Union{BinarySearchTree{T}, Nothing}, target::T) where T
+    node = _predecessor(tree.root, target)
+    return node === nothing ? nothing : node.elem
+end
+
+
 function Base.insert!(tree::BinarySearchTree{T}, key::T) where T
     tree.root = _insert!(tree, tree.root, key)
     return tree
@@ -177,4 +199,34 @@ function Base.iterate(tree::BinarySearchTree{T}, stack::Stack{NodeBST{T}}) where
     end
 end
 
+function Base.minimum(tree::BinarySearchTree{T}) where T
+    if tree.root === nothing
+        return nothing
+    end
+    curr = tree.root
+    while curr.left !== nothing
+        curr = curr.left
+    end
+    return curr.elem
+end
+
+function Base.maximum(tree::BinarySearchTree{T}) where T
+    if tree.root === nothing
+        return nothing
+    end
+    curr = tree.root
+    while curr.right !== nothing
+        curr = curr.right
+    end
+    return curr.elem
+end
+
+function main() 
+    bt = BinarySearchTree{Int}([1,2,3,4,56,7,8,9,200,123,4])
+    println(predecessor(bt, 56))
+    println(maximum(bt))
+    println(minimum(bt))
+end
+
+main()
 end
