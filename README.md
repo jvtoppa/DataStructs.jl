@@ -6,7 +6,7 @@ Currently supported Data Structures:
 1. Linked List
 2. Queue
 3. Stack
-4. Binary Tree
+4. Binary Search Tree
  
 Planned Data Structures:
 
