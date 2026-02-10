@@ -12,6 +12,10 @@ Planned Data Structures:
 
 
 1. N-ary Tree
-2. Heap
-3. Hashset
-4. Hashmap
+2. AVL Tree
+3. Red-Black Tree
+4. Heap
+5. Hashset
+6. Hashmap
+
+Any suggestions? Add to Discussions!
