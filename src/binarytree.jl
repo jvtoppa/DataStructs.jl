@@ -1,3 +1,10 @@
+module BinaryTrees
+
+export BinarySearchTree, isempty, length, in, search, successor, insert!, iterate, empty!, minimum
+
+include("stack.jl")   # loads the module
+using .Containers
+
 #insert()
 #remove()
 abstract type BinaryTreeNode{T} end
@@ -110,11 +117,53 @@ end
 
 Base.in(key, tree::BinarySearchTree) = search(tree, key)
 
+<<<<<<< HEAD
 function leftmostnode(node::Union{NodeBST{T}, Nothing}) where T
     while node.left !== nothing
         node = node.left
     end
     return node
+=======
+function _successor(node::Union{NodeBST{T}, Nothing}, target::T) where T
+    curr = node
+    succ = nothing
+
+    while curr !== nothing
+        if target < curr.elem
+            succ = curr
+            curr = curr.left
+        else
+            curr = curr.right
+        end
+    end
+    return succ
+end
+
+function successor(tree::Union{BinarySearchTree{T}, Nothing}, target::T) where T
+    node = _successor(tree.root, target)
+    return node === nothing ? nothing : node.elem
+end
+
+function _predecessor(root::Union{NodeBST{T}, Nothing}, key::T) where T
+    pred = nothing
+    curr = root
+    
+    while curr !== nothing
+        if key > curr.elem
+            pred = curr
+            curr = curr.right
+        else
+            curr = curr.left
+        end
+    end
+    
+    return pred
+end
+
+function predecessor(tree::Union{BinarySearchTree{T}, Nothing}, target::T) where T
+    node = _predecessor(tree.root, target)
+    return node === nothing ? nothing : node.elem
+>>>>>>> d53acf646cf62ee27f6e0185eaa74ae9f5058394
 end
 
 function _successor(node::Union{NodeBST{T}, Nothing}, target::T) where T
@@ -142,11 +191,77 @@ function Base.insert!(tree::BinarySearchTree{T}, key::T) where T
     return tree
 end
 
+<<<<<<< HEAD
 function main()
     bt = BinarySearchTree{Int}([1,2,3,4,56,7,8,9,200,123,4])
     print_tree_vertical(bt)
     print(isempty(bt))
     print(successor(bt, 56))  
+=======
+function _push_left(stack::Stack{NodeBST{T}}, node::Union{NodeBST{T}, Nothing}) where T
+    
+    while node !== nothing
+        push!(stack, node)
+        node = node.left
+    end
+
+>>>>>>> d53acf646cf62ee27f6e0185eaa74ae9f5058394
+end
+
+function Base.iterate(tree::BinarySearchTree{T}) where T
+    stack = Stack(NodeBST{T})
+
+    _push_left(stack, tree.root)
+    
+    if isempty(stack)
+        return nothing
+    
+    else
+        node = pop!(stack)
+        _push_left(stack, node.right)
+        return node.elem, stack
+    end
+
+end
+
+function Base.iterate(tree::BinarySearchTree{T}, stack::Stack{NodeBST{T}}) where T
+    if isempty(stack)
+        return nothing
+    else
+        node = pop!(stack)
+        _push_left(stack, node.right)
+        return node.elem, stack
+    end
+end
+
+function Base.minimum(tree::BinarySearchTree{T}) where T
+    if tree.root === nothing
+        return nothing
+    end
+    curr = tree.root
+    while curr.left !== nothing
+        curr = curr.left
+    end
+    return curr.elem
+end
+
+function Base.maximum(tree::BinarySearchTree{T}) where T
+    if tree.root === nothing
+        return nothing
+    end
+    curr = tree.root
+    while curr.right !== nothing
+        curr = curr.right
+    end
+    return curr.elem
+end
+
+function main() 
+    bt = BinarySearchTree{Int}([1,2,3,4,56,7,8,9,200,123,4])
+    println(predecessor(bt, 56))
+    println(maximum(bt))
+    println(minimum(bt))
 end
 
 main()
+end
